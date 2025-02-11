@@ -133,8 +133,8 @@ WebAssembly engines.
 In the future, WebAssembly may offer the ability to use larger page sizes on
 some platforms for increased TLB efficiency.
 
-The `grow_memory` operator returns the old memory size. This is desirable for
-using `grow_memory` independently on multiple threads, so that each thread can
+The `memory.grow` operator returns the old memory size. This is desirable for
+using `memory.grow` independently on multiple threads, so that each thread can
 know where the region it allocated starts. The obvious alternative would be for
 such threads to communicate manually, however WebAssembly implementations will likely
 already be communicating between threads in order to properly allocate the sum
@@ -362,7 +362,7 @@ observed:
    it then be observed
 
 The motivation for nondeterminism in NaN bit patterns is that popular platforms
-have differing behavior. IEEE 754-2008 makes some recommendations, but has few
+have differing behavior. IEEE 754-2019 makes some recommendations, but has few
 hard requirements in this area, and in practice there is significant divergence,
 for example:
  - When an instruction with no NaN inputs produces a NaN output, x86 produces
@@ -377,13 +377,13 @@ for example:
  - LLVM (used in some WebAssembly implementations) doesn't guarantee that it
    won't commute `fadd`, `fmul` and other instructions, so it's not possible
    to rely on the "first" NaN being preserved as such.
- - IEEE 754-2008 itself recommends architectures use NaN bits to provide
+ - IEEE 754-2019 itself recommends architectures use NaN bits to provide
    architecture-specific debugging facilities.
 
-IEEE 754-2008 6.2 says that instructions returning a NaN *should* return one of
+IEEE 754-2019 6.2 says that instructions returning a NaN *should* return one of
 their input NaNs. In WebAssembly, implementations may do this, however they are
-not required to. Since IEEE 754-2008 states this as a "should" (as opposed to a
-"shall"), it isn't a requirement for IEEE 754-2008 conformance.
+not required to. Since IEEE 754-2019 states this as a "should" (as opposed to a
+"shall"), it isn't a requirement for IEEE 754-2019 conformance.
 
 An alternative design would be to require engines to always "canonicalize"
 NaNs whenever their bits could be observed. This would eliminate the
@@ -457,10 +457,10 @@ hardware platforms.
 ## Motivating Scenarios for Feature Testing
 
 1. [Post-MVP :unicorn:][future general],
-[`i32.min_s` :unicorn:][future integer] is introduced. A
+[`i32.bitrev` :unicorn:][future bitrev] is introduced. A
 WebAssembly developer updates their toolkit so that the compiler may leverage
-`i32.min_s`. The developer's WebAssembly module works correctly both on
-execution environments at MVP, as well as those supporting `i32.min_s`.
+`i32.bitrev`. The developer's WebAssembly module works correctly both on
+execution environments at MVP, as well as those supporting `i32.bitrev`.
 
   * A variant of this, where a few more new opcodes are available, the compiler
 is updated to be able to leverage all of them, but not all execution targets
@@ -605,8 +605,8 @@ Moreover, programming languages that allow control transfer _expressions_ usuall
 
 
 [future general]: FutureFeatures.md
-[future flow control]: FutureFeatures.md#more-expressive-control-flow
-[future integer]: FutureFeatures.md#additional-integer-operations
+[future flow control]: https://github.com/WebAssembly/design/issues/796
+[future bitrev]: https://github.com/WebAssembly/design/issues/1382
 [future threads]: https://github.com/WebAssembly/design/issues/1073
 [future simd]: https://github.com/WebAssembly/design/issues/1075
 [future garbage collection]: https://github.com/WebAssembly/proposals/issues/16

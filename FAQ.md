@@ -118,7 +118,7 @@ LLVM support because they had more experience with that toolchain from their
 [Emscripten][] and [PNaCl][] work.
 
   [Emscripten]: http://emscripten.org
-  [PNaCl]: http://gonacl.com
+  [PNaCl]: https://developer.chrome.com/docs/native-client/
   [GCC]: https://gcc.gnu.org
 
 We hope that proprietary compilers also gain WebAssembly support, but we'll let
@@ -185,12 +185,12 @@ together in a number of configurations:
 
 ## Why not just use LLVM bitcode as a binary format?
 
-The [LLVM](https://llvm.org/) compiler infrastructure has a lot to recommend it:
-it has an existing intermediate representation (LLVM IR) and binary encoding
-format (bitcode). It has code generation backends targeting many architectures
-is actively developed and maintained by a large community. In fact
-[PNaCl](http://gonacl.com) already uses LLVM as a basis for its binary
-format. However the goals and requirements that LLVM was designed to meet are
+The [LLVM](https://llvm.org/) compiler infrastructure has a lot of attractive 
+qualities: it has an existing intermediate representation (LLVM IR) and binary
+encoding format (bitcode). It has code generation backends targeting many 
+architectures and is actively developed and maintained by a large community. In
+fact PNaCl already uses LLVM as a basis for its binary
+format. However, the goals and requirements that LLVM was designed to meet are
 subtly mismatched with those of WebAssembly.
 
 WebAssembly has several requirements and goals for its Instruction Set
@@ -220,8 +220,8 @@ information that is useful for implementing mid-level compiler optimizations but
 is not useful for code generation (but which represents a large surface area for
 codegen implementers to deal with).  It also has undefined behavior (largely
 similar to that of C and C++) which makes some classes of optimization feasible
-or more powerful, but which can lead to unpredictable behavior at runtime.
-LLVM's binary format (bitcode) was designed for temporary on-disk serialization
+or more powerful, but can lead to unpredictable behavior at runtime. LLVM's
+binary format (bitcode) was designed for temporary on-disk serialization
 of the IR for link-time optimization, and not for stability or compressibility
 (although it does have some features for both of those).
 
@@ -311,11 +311,11 @@ syscall in POSIX, WebAssembly unpacks this functionality into multiple
 operators:
 
 * the MVP starts with the ability to grow linear memory via a
-  [`grow_memory`](Semantics.md#resizing) operator;
+  [`memory.grow`] operator;
 * proposed
   [future features :unicorn:][future memory control] would
   allow the application to change the protection and mappings for pages in the
-  contiguous range `0` to `memory_size`.
+  contiguous range `0` to `memory.size`.
 
 A significant feature of `mmap` that is missing from the above list is the
 ability to allocate disjoint virtual address ranges. The reasoning for this
@@ -378,7 +378,7 @@ The motivations and performance effects here should be essentially the same as
 those that motivated the development of the
 [x32 ABI](https://en.wikipedia.org/wiki/X32_ABI) for Linux.
 
-Even Knuth found it worthwhile to give us his opinion on this issue at point,
+Even Knuth found it worthwhile to give us his opinion on this issue at some point,
 [a flame about 64-bit pointers](https://www-cs-faculty.stanford.edu/~uno/news08.html).
 
 ## Will I be able to access proprietary platform APIs (e.g. Android / iOS)?
@@ -392,5 +392,6 @@ Android / iOS.
 
 [future general]: FutureFeatures.md
 [future garbage collection]: https://github.com/WebAssembly/proposals/issues/16
-[future floating point]: FutureFeatures.md#additional-floating-point-operators
-[future memory control]: FutureFeatures.md#finer-grained-control-over-memory
+[future floating point]: https://github.com/WebAssembly/design/issues/1391
+[future memory control]: https://github.com/WebAssembly/memory-control
+[`memory.grow`]: https://webassembly.github.io/spec/core/syntax/instructions.html#syntax-instr-memory
